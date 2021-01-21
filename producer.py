@@ -64,9 +64,23 @@ if __name__ == '__main__':
             print("Produced record to topic {} partition [{}] @ offset {}"
                   .format(msg.topic(), msg.partition(), msg.offset()))
 
-    for n in range(100):
-        record_key = "alice"
-        record_value = json.dumps({'count': n})
+    # for n in range(100):
+    #     record_key = "alice"
+    #     record_value = json.dumps({'count': n})
+    #     print("Producing record: {}\t{}".format(record_key, record_value))
+    #     producer.produce(topic, key=record_key,
+    #                      value=record_value, on_delivery=acked)
+    #     # p.poll() serves delivery reports (on_delivery)
+    #     # from previous produce() calls.
+    #     producer.poll(0)
+
+    with open('bcsample_1000.json') as f:
+        # return JSON object as a dictionary
+        bcsample_data = json.load(f)
+
+    for bc_data in bcsample_data:
+        record_key = "breadcrumb"
+        record_value = json.dumps(bc_data)
         print("Producing record: {}\t{}".format(record_key, record_value))
         producer.produce(topic, key=record_key,
                          value=record_value, on_delivery=acked)

@@ -70,8 +70,11 @@ if __name__ == '__main__':
                 record_key = msg.key()
                 record_value = msg.value()
                 data = json.loads(record_value)
-                count = data['count']
-                total_count += count
+                # count = data['count']
+                # Instead of count field in actual example add the EVENT_NO_TRIP.
+                # I am doing this just to prove the code works.
+                count = data['EVENT_NO_TRIP']
+                total_count += int(count)
                 print("Consumed record with key {} and value {}, \
                       and updated total count to {}"
                       .format(record_key, record_value, total_count))
