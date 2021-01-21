@@ -64,7 +64,7 @@ if __name__ == '__main__':
             print("Produced record to topic {} partition [{}] @ offset {}"
                   .format(msg.topic(), msg.partition(), msg.offset()))
 
-    for n in range(10):
+    for n in range(100):
         record_key = "alice"
         record_value = json.dumps({'count': n})
         print("Producing record: {}\t{}".format(record_key, record_value))
