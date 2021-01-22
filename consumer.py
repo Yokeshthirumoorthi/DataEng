@@ -69,8 +69,10 @@ if __name__ == '__main__':
                 # Check for Kafka message
                 # Convert bytestring to normal string
                 record_key = msg.key().decode("utf-8")
-                # Consume only record with key 5
-                if record_key == '5':
+                # Consume only record with odd number keys
+                # if record_key in ['1', '3', '5']:
+                # Consume only record with even number keys
+                if record_key in ['2', '4']:
                     record_value = msg.value()
                     data = json.loads(record_value)
                     # count = data['count']
