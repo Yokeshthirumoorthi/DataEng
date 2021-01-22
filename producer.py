@@ -74,7 +74,7 @@ if __name__ == '__main__':
     #     # from previous produce() calls.
     #     producer.poll(0)
 
-    with open('bcsample_1000.json') as f:
+    with open('bcsample.json') as f:
         # return JSON object as a dictionary
         bcsample_data = json.load(f)
 
