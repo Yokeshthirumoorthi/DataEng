@@ -25,7 +25,7 @@
 from confluent_kafka import Producer, KafkaError
 import json
 import ccloud_lib
-
+import random
 
 if __name__ == '__main__':
 
@@ -79,7 +79,9 @@ if __name__ == '__main__':
         bcsample_data = json.load(f)
 
     for bc_data in bcsample_data:
-        record_key = "breadcrumb"
+        # record_key = "breadcrumb"
+        # Choose a random number between 1 and 5 for each record’s key
+        record_key = str(random.randint(1, 5))
         record_value = json.dumps(bc_data)
         print("Producing record: {}\t{}".format(record_key, record_value))
         producer.produce(topic, key=record_key,

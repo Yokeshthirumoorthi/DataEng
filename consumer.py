@@ -67,17 +67,22 @@ if __name__ == '__main__':
                 print('error: {}'.format(msg.error()))
             else:
                 # Check for Kafka message
-                record_key = msg.key()
-                record_value = msg.value()
-                data = json.loads(record_value)
-                # count = data['count']
-                # Instead of count field in actual example add the EVENT_NO_TRIP.
-                # I am doing this just to prove the code works.
-                count = data['EVENT_NO_TRIP']
-                total_count += int(count)
-                print("Consumed record with key {} and value {}, \
-                      and updated total count to {}"
-                      .format(record_key, record_value, total_count))
+                # Convert bytestring to normal string
+                record_key = msg.key().decode("utf-8")
+                # Consume only record with key 5
+                if record_key == '5':
+                    record_value = msg.value()
+                    data = json.loads(record_value)
+                    # count = data['count']
+                    # Instead of count field in actual example add the EVENT_NO_TRIP.
+                    # I am doing this just to prove the code works.
+                    count = data['EVENT_NO_TRIP']
+                    total_count += int(count)
+                    print("Consumed record with key {} and value {}, \
+                            and updated total count to {}"
+                          .format(record_key, record_value, total_count))
+                else:  # If key is not 5 then jest print the key and do nothing
+                    print("Consumed record with key {}".format(record_key))
     except KeyboardInterrupt:
         pass
     finally:
