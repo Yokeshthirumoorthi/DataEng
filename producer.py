@@ -86,7 +86,7 @@ if __name__ == '__main__':
                          value=record_value, on_delivery=acked)
         # p.poll() serves delivery reports (on_delivery)
         # from previous produce() calls.
-        producer.poll(0)
+        producer.poll(250)
 
     producer.flush()
 
