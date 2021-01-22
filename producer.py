@@ -42,8 +42,10 @@ if __name__ == '__main__':
         'security.protocol': conf['security.protocol'],
         'sasl.username': conf['sasl.username'],
         'sasl.password': conf['sasl.password'],
+        'transactional.id': 'python-tran-id-1'
     })
 
+    producer.init_transactions()
     # Create topic if needed
     ccloud_lib.create_topic(conf, topic)
 
@@ -64,6 +66,10 @@ if __name__ == '__main__':
             print("Produced record to topic {} partition [{}] @ offset {}"
                   .format(msg.topic(), msg.partition(), msg.offset()))
 
+    # if given an input of, say, 0.7 will return True with a 70% probability and false with a 30% probability
+    def decision(probability):
+        return random.random() < probability
+
     # for n in range(100):
     #     record_key = "alice"
     #     record_value = json.dumps({'count': n})
@@ -83,12 +89,20 @@ if __name__ == '__main__':
         # Choose a random number between 1 and 5 for each record’s key
         record_key = str(random.randint(1, 5))
         record_value = json.dumps(bc_data)
-        print("Producing record: {}\t{}".format(record_key, record_value))
+        print("Producing record key: {}".format(record_key))
+        producer.begin_transaction()
         producer.produce(topic, key=record_key,
                          value=record_value, on_delivery=acked)
         # p.poll() serves delivery reports (on_delivery)
         # from previous produce() calls.
-        producer.poll(250)
+        producer.poll(2000)
+
+        # CShoose True/False randomly with equal probability
+        if decision(0.5):
+            print("Commiting record key: {}".format(record_key))
+            producer.commit_transaction()
+        else:
+            producer.abort_transaction()
 
     producer.flush()
 
